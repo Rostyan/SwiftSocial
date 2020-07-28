@@ -1,3 +1,10 @@
+//
+//  ViewController.swift
+//  swiftconcepts
+//
+//  Created by new on 18/05/18.
+//  Copyright © 2018 yuvraj. All rights reserved.
+//
 
 import UIKit
 import FBSDKCoreKit
@@ -9,28 +16,22 @@ class LoginViewController: BaseViewController, FBSDKLoginButtonDelegate, Respons
 SocialDelegate, GIDSignInDelegate, GIDSignInUIDelegate{
     
     @IBOutlet var imageSocial: UIImageView!
-    @IBOutlet var loginButton: FBSDKLoginButton!
     @IBOutlet var textUserName: UITextField!
     @IBOutlet var textPassword: UITextField!
     @IBOutlet var labelError: UILabel!
     @IBOutlet var googleButton: GIDSignInButton!
     
     
-    let fireAuth : FirebaseAuthenticator = FirebaseAuthenticator()
     let socialAuth : SocialAuthenticator = SocialAuthenticator()
     
     override func viewDidLoad() {
         super.viewDidLoad() 
         labelError.isHidden = true
         
-        loginButton.readPermissions = ["public_profile", "email"]
-        loginButton.frame = CGRect(x: 0, y: 0, width: 200, height: 45)
-        loginButton.delegate = self
-        fireAuth.delegate = self
+
         socialAuth.delegate = self
         
         guard FBSDKAccessToken.current() == nil else {
-            // User is logged in, use 'accessToken' here.
             showProgressIndicator()
             socialAuth.facebookLogin()
             return
@@ -41,6 +42,7 @@ SocialDelegate, GIDSignInDelegate, GIDSignInUIDelegate{
         //        showProgressIndicator()
     }
     
+
     
     // FIREBASE LOGIN API -----
     
@@ -138,10 +140,10 @@ SocialDelegate, GIDSignInDelegate, GIDSignInUIDelegate{
         print(user)
         
         if (error == nil) {
-            let userId = user.userID                 
+            let userId = user.userID                  
             print("User id is "+userId!+"")
             
-            let idToken = user.authentication.idToken 
+            let idToken = user.authentication.idToken
             print("Authentication idToken is "+idToken!+"")
             let fullName = user.profile.name
             print("User full name is "+fullName!+"")
@@ -194,6 +196,7 @@ SocialDelegate, GIDSignInDelegate, GIDSignInUIDelegate{
         hideProgressIndicator()
         print(user)
         labelError.isHidden = false;
+        //        labelError.text = "Failed : "+user+""
     }
     
     func onGoogleErrorResponse(error: Error?) {
@@ -203,4 +206,5 @@ SocialDelegate, GIDSignInDelegate, GIDSignInUIDelegate{
         labelError.text = "Failed : "+(error?.localizedDescription)!+""
     }
 }
+
 
